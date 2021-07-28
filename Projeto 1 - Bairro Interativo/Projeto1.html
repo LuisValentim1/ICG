@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<!--
+    Projeto 1 - Bairro - Luís Valentim 93989 - ICG 
+-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> 3D scene - Projeto - Bairro - Luís Valentim </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script type="module">
+
+        import * as THREE from "https://threejs.org/build/three.module.js";
+
+        import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+
+        // TO INITIALIZE
+
+        const helper = {
+
+            initEmptyScene: function (sceneElements) {
+
+                // ************************** //
+                // Create the 3D scene
+                // ************************** //
+                sceneElements.sceneGraph = new THREE.Scene();
+
+
+                // ************************** //
+                // Add camera
+                // ************************** //
+
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 500);
+                sceneElements.camera = camera;
+                camera.position.set(0, 15, 25);
+                camera.lookAt(0, 0, 0);
+
+                // ************************** //
+                // Illumination
+                // ************************** //
+
+                // ************************** //
+                // Add ambient light
+                // ************************** //
+                const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.2);
+                sceneElements.sceneGraph.add(ambientLight);
+
+                // ***************************** //
+                // Add spotlight (with shadows)
+                // ***************************** //
+                const spotLight = new THREE.SpotLight('rgb(255, 255, 255)', 0.8);
+                const spotLight2 = new THREE.SpotLight('rgb(255, 255, 255)', 0.8);
+
+                spotLight.position.set(-10, 40, 10);
+                spotLight2.position.set(20, 40, -2);
+
+                sceneElements.sceneGraph.add(spotLight);
+                sceneElements.sceneGraph.add(spotLight2);
+
+                // Setup shadow properties for the spotlight
+                spotLight.castShadow = true;
+                spotLight.shadow.mapSize.width = 2048;
+                spotLight.shadow.mapSize.height = 2048;
+                spotLight2.castShadow = true;
+                spotLight2.shadow.mapSize.width = 2048;
+                spotLight2.shadow.mapSize.height = 2048;
+
+                // Give a name to the spot light
+                spotLight.name = "light";
+
+
+                // *********************************** //
+                // Create renderer (with shadow map)
+                // *********************************** //
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                sceneElements.renderer = renderer;
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setClearColor('rgb(255, 255, 150)', 1.0);
+                renderer.setSize(width, height);
+
+                // Setup shadowMap property
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+
+                // **************************************** //
+                // Add the rendered image in the HTML DOM
+                // **************************************** //
+                const htmlElement = document.querySelector("#Tag3DScene");
+                htmlElement.appendChild(renderer.domElement);
+
+                // ************************** //
+                // NEW --- Control for the camera
+                // ************************** //
+                sceneElements.control = new OrbitControls(camera, renderer.domElement);
+                sceneElements.control.screenSpacePanning = true;
+
+            },
+
+            render: function render(sceneElements) {
+                sceneElements.renderer.render(sceneElements.sceneGraph, sceneElements.camera);
+            },
+        };
+
+        // BUILDING THE SCENE
+        // To store the scene graph, and elements usefull to rendering the scene
+        const sceneElements = {
+            sceneGraph: null,
+            camera: null,
+            control: null,  // NEW
+            renderer: null,
+        };
+
+
+        // Functions are called
+        //  1. Initialize the empty scene
+        //  2. Add elements within the scene
+        //  3. Animate
+        function init() {
+            helper.initEmptyScene(sceneElements);
+            load3DObjects(sceneElements.sceneGraph);
+            requestAnimationFrame(computeFrame);
+        }
+
+        // HANDLING EVENTS
+        let positions = [[-8,-8],[-4,-8], [0,-8],[4,-8],[8,-8],[-8,-4],[-4,-4], [0,-4],[4,-4],[8,-4],[-8,0],[-4,0], [0,0],[4,0],[8,0],[-8,4],[-4,4], [0,4],[4,4],[8,4],[-8,8],[-4,8], [0,8],[4,8],[8,8],]
+
+        window.addEventListener('resize', resizeWindow);
+
+        let pos1 = document.getElementById("pos1");
+        let pos2 = document.getElementById("pos2");
+        let pos3 = document.getElementById("pos3");
+        let pos4 = document.getElementById("pos4");
+        let pos5 = document.getElementById("pos5");
+        let pos6 = document.getElementById("pos6");
+        let pos7 = document.getElementById("pos7");
+        let pos8 = document.getElementById("pos8");
+        let pos9 = document.getElementById("pos9");
+        let pos10 = document.getElementById("pos10");
+        let pos11 = document.getElementById("pos11");
+        let pos12 = document.getElementById("pos12");
+        let pos13 = document.getElementById("pos13");
+        let pos14 = document.getElementById("pos14");
+        let pos15 = document.getElementById("pos15");
+        let pos16 = document.getElementById("pos16");
+        let pos17 = document.getElementById("pos17");
+        let pos18 = document.getElementById("pos18");
+        let pos19 = document.getElementById("pos19");
+        let pos20 = document.getElementById("pos20");
+        let pos21 = document.getElementById("pos21");
+        let pos22 = document.getElementById("pos22");
+        let pos23 = document.getElementById("pos23");
+        let pos24 = document.getElementById("pos24");
+        let pos25 = document.getElementById("pos25");
+
+        pos1.addEventListener("change", (event) => {updatePositions(1, event.target.value)})
+        pos2.addEventListener("change", (event) => {updatePositions(2, event.target.value)})
+        pos3.addEventListener("change", (event) => {updatePositions(3, event.target.value)})
+        pos4.addEventListener("change", (event) => {updatePositions(4, event.target.value)})
+        pos5.addEventListener("change", (event) => {updatePositions(5, event.target.value)})
+        pos6.addEventListener("change", (event) => {updatePositions(6, event.target.value)})
+        pos7.addEventListener("change", (event) => {updatePositions(7, event.target.value)})
+        pos8.addEventListener("change", (event) => {updatePositions(8, event.target.value)})
+        pos9.addEventListener("change", (event) => {updatePositions(9, event.target.value)})
+        pos10.addEventListener("change", (event) => {updatePositions(10, event.target.value)})
+        pos11.addEventListener("change", (event) => {updatePositions(11, event.target.value)})
+        pos12.addEventListener("change", (event) => {updatePositions(12, event.target.value)})
+        pos13.addEventListener("change", (event) => {updatePositions(13, event.target.value)})
+        pos14.addEventListener("change", (event) => {updatePositions(14, event.target.value)})
+        pos15.addEventListener("change", (event) => {updatePositions(15, event.target.value)})
+        pos16.addEventListener("change", (event) => {updatePositions(16, event.target.value)})
+        pos17.addEventListener("change", (event) => {updatePositions(17, event.target.value)})
+        pos18.addEventListener("change", (event) => {updatePositions(18, event.target.value)})
+        pos19.addEventListener("change", (event) => {updatePositions(19, event.target.value)})
+        pos20.addEventListener("change", (event) => {updatePositions(20, event.target.value)})
+        pos21.addEventListener("change", (event) => {updatePositions(21, event.target.value)})
+        pos22.addEventListener("change", (event) => {updatePositions(22, event.target.value)})
+        pos23.addEventListener("change", (event) => {updatePositions(23, event.target.value)})
+        pos24.addEventListener("change", (event) => {updatePositions(24, event.target.value)})
+        pos25.addEventListener("change", (event) => {updatePositions(25, event.target.value)})
+        
+        function updatePositions(pos, value){
+            let houseColors = ['rgb(255, 255, 127)', 'rgb(145, 110, 153)', 'rgb(222, 157, 172)', 'rgb(184, 101, 102)', 'rgb(101,140,187)']
+
+            if(value=="0"){
+                    var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                    if(selectedObject != undefined){
+                        sceneElements.sceneGraph.remove( selectedObject );
+                    }
+                }
+            if(value=="1"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const house = createHouse(positions[pos-1][0], positions[pos-1][1], houseColors[parseInt(Math.random()*4)]);
+                    house.name = "pos" + (pos).toString()
+                    sceneElements.sceneGraph.add(house)
+                }
+                else{
+                    const house = createHouse(positions[pos-1][0], positions[pos-1][1], houseColors[parseInt(Math.random()*4)]);
+                    house.name = "pos" + (pos).toString()
+                    sceneElements.sceneGraph.add(house)
+                }
+            }
+            if(value=="2"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const building = createBuilding(positions[pos-1][0], positions[pos-1][1], parseInt(Math.random()*8));
+                    building.name = "pos"+(pos).toString()
+                    sceneElements.sceneGraph.add(building)
+                }else{
+                    const building = createBuilding(positions[pos-1][0], positions[pos-1][1], parseInt(Math.random()*8));
+                    building.name = "pos"+(pos).toString()
+                    sceneElements.sceneGraph.add(building)
+                }
+            }
+            if(value=="3"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString().toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const park = createPark(positions[pos-1][0], positions[pos-1][1], parseInt((Math.random() * 3)) +5);
+                    sceneElements.sceneGraph.add(park)
+                    park.name = "pos"+(pos).toString()
+                }else{
+                    const park = createPark(positions[pos-1][0], positions[pos-1][1], parseInt((Math.random() * 3)) +5);
+                    sceneElements.sceneGraph.add(park)
+                    park.name = "pos"+(pos).toString()
+                }
+            }
+            if(value=="4"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const road = createRoad(positions[pos-1][0], positions[pos-1][1], false);
+                    sceneElements.sceneGraph.add(road)
+                    road.name = "pos"+(pos).toString()
+                }else{
+                    const road = createRoad(positions[pos-1][0], positions[pos-1][1], false);
+                    sceneElements.sceneGraph.add(road)
+                    road.name = "pos"+(pos).toString()
+                }
+            }
+            if(value=="5"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const road = createRoad(positions[pos-1][0], positions[pos-1][1], true);
+                    sceneElements.sceneGraph.add(road)
+                    road.name = "pos"+(pos).toString()
+                }else{
+                    const road = createRoad(positions[pos-1][0], positions[pos-1][1], true);
+                    sceneElements.sceneGraph.add(road)
+                    road.name = "pos"+(pos).toString()
+                }
+            }
+            if(value=="6"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const cross = createCrossRoad(positions[pos-1][0], positions[pos-1][1]);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }else{
+                    const cross = createCrossRoad(positions[pos-1][0], positions[pos-1][1]);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }
+            }
+            //Right Up Turn
+            if(value=="7"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], false, false);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }else{
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], false, false);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }
+            }
+            //Left Up Turn
+            if(value=="8"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], false, true);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }else{
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], false, true);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }
+            }
+            //Right Down Turn
+            if(value=="9"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], true, false);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }else{
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], true, false);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }
+            }
+            //Left Down Turn
+            if(value=="10"){
+                var selectedObject = sceneElements.sceneGraph.getObjectByName("pos"+(pos).toString());
+                if(selectedObject != undefined){
+                    sceneElements.sceneGraph.remove( selectedObject );
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], true, true);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }else{
+                    const cross = createTurn(positions[pos-1][0], positions[pos-1][1], true, true);
+                    sceneElements.sceneGraph.add(cross)
+                    cross.name = "pos"+(pos).toString()
+                }
+            }
+
+            requestAnimationFrame(computeFrame);
+        }
+
+        // Update render image size and camera aspect when the window is resized
+        function resizeWindow(eventParam) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            sceneElements.camera.aspect = width / height;
+            sceneElements.camera.updateProjectionMatrix();
+
+            sceneElements.renderer.setSize(width, height);
+        }
+
+        function load3DObjects(sceneGraph) {
+
+            // ************************** //
+            // Create a ground plane
+            // ************************** //
+            const planeGeometry = new THREE.PlaneGeometry(20, 20);
+            const planeMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(86, 252, 3)', side: THREE.DoubleSide });
+            const planeObject = new THREE.Mesh(planeGeometry, planeMaterial);
+            sceneGraph.add(planeObject);
+
+            // Change orientation of the plane using rotation
+            planeObject.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+
+            // Set Shadow Property
+            planeObject.receiveShadow = true;
+            }
+
+            //-----------------------------------------------CREATE TREE FUNCTION----------------------------------------------------
+            function createTree(x, y, z) {
+
+            // Create Centerpiece Object
+            var tree = new THREE.Group();
+            tree.position.set(x, y, z);
+
+            // Create Objects 
+            const cylinderGeometry = new THREE.CylinderGeometry(0.2, 0.2, 0.85, 32);
+            const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+            const cylinder = new THREE.Mesh(cylinderGeometry, redMaterial);
+
+            const coneGeometry = new THREE.ConeGeometry(0.5, 3, 32);
+            const greenMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+            const cone = new THREE.Mesh(coneGeometry, greenMaterial);
+
+            // Set Shadow Properties
+            cylinder.castShadow = true;
+            cylinder.receiveShadow = true;
+            cone.castShadow = true;
+            cone.receiveShadow = true;
+
+            // Set Positions
+            cylinder.position.y = 0.5;
+            cone.position.y = 2.35;
+
+            // Add Each Element
+            tree.add(cylinder);
+            tree.add(cone);
+
+            return tree;
+            }
+
+            //-----------------------------------------------CREATE PARK FUNCTION----------------------------------------------------
+            function createPark(x,z, numTrees){
+
+            // Create Centerpiece Object
+            var park = new THREE.Object3D();
+            park.position.set(x, 0, z)
+
+            // Cycle to create trees in random positions within a 4*4 by square centered on (x,0,z)
+            var created = 0
+            while(created < numTrees){
+                var c1 = createTree((Math.random()-0.5)* 3.2, 0, (Math.random() -0.5)* 3.2)
+                park.add(c1)
+                created++
+            }
+
+            // Add a Fence
+            var f1 = createFence(0,0)
+            park.add(f1)
+
+            return park
+            }
+
+            //-----------------------------------------------CREATE BUILDING FUNCTION----------------------------------------------------
+            function createBuilding(x,z, extra){
+
+            // Create Centerpiece Object
+            var building = new THREE.Object3D();
+            building.position.set(x, 0, z)
+
+            //Create Objects
+            const boxGeometry = new THREE.BoxGeometry(4,5+extra,0.5);
+            const roofGeometry = new THREE.BoxGeometry(4,2,4);
+            const wallMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(220, 225, 218)' });
+
+            const wallObject1 = new THREE.Mesh(boxGeometry, wallMaterial);
+            const wallObject2 = new THREE.Mesh(boxGeometry, wallMaterial);
+            const wallObject3 = new THREE.Mesh(boxGeometry, wallMaterial);
+            const wallObject4 = new THREE.Mesh(boxGeometry, wallMaterial);
+
+            const roof = new THREE.Mesh(roofGeometry, wallMaterial);
+
+            var door1 = createDoor(0, 0, false)
+            var door2 = createDoor(0, 0, true)
+
+            //Defenir propriedades de sombras 
+            wallObject1.castShadow = true;
+            wallObject1.receiveShadow = true;
+            wallObject2.castShadow = true;
+            wallObject2.receiveShadow = true;
+            wallObject3.castShadow = true;
+            wallObject3.receiveShadow = true;
+            wallObject4.castShadow = true;
+            wallObject4.receiveShadow = true;
+            roof.castShadow = true;
+            roof.receiveShadow = true;
+
+            // Triple cycle which creates windows all around the building on n levels depending on how tall the building is 
+            var windowLevel = 1
+            var size = parseInt((5+extra)/2)
+
+            while( windowLevel < size){
+                for (var x = -2; x < 3; x++){
+                    var k = 2;
+                    if (x==0){
+                        x++;
+                    }
+                    if(x>0){
+                        k = -2
+                    }
+                    for (var i = -1; i < 2; i++){ 
+                        if(i == 0){
+                            i++
+                        }
+                        if(!(x%2 == 0)){
+                            var w1 = createWindow(k, 1+(windowLevel*2), i)
+                        }else{
+                            var w1 = createWindow(i, 1+(windowLevel*2), k)
+                        }
+                        
+                        if(!(x%2 == 0)){
+                            w1.rotateY(Math.PI / 2)
+                        }
+                        building.add(w1);
+                    }       
+                }
+                windowLevel++  
+            }
+
+            // Set Positions
+            wallObject3.rotateY(Math.PI/2)
+            wallObject4.rotateY(Math.PI/2)
+
+            wallObject1.position.set(0, 2.5+extra/2, 1.75)
+            wallObject2.position.set(0, 2.5+extra/2, -1.75)
+            wallObject3.position.set(1.75, 2.5+extra/2, 0)
+            wallObject4.position.set(-1.75, 2.5+extra/2, 0)
+
+            roof.position.set(0, 3.5+extra, 0)
+
+            door1.position.set(-0.4, 0.75, 1.99)
+            door2.position.set(0.4, 0.75, 1.99)
+
+            // Add Each Element
+            building.add(wallObject1)
+            building.add(wallObject2)
+            building.add(wallObject3)
+            building.add(wallObject4)
+            building.add(roof)
+            building.add(door1)
+            building.add(door2)
+
+            return building 
+            }
+
+            //-----------------------------------------------CREATE HOUSE FUNCTION----------------------------------------------------
+
+            function createHouse(x,z, rgb){
+
+            // Create Centerpiece Objects
+            var house = new THREE.Object3D();
+            var property = new THREE.Object3D();
+
+            property.position.set(x, 0, z)
+            house.position.set(0, 0, -0.1);
+
+            // Create Objects
+            const boxGeometry = new THREE.BoxGeometry(2.2,2.5,2.3);
+            const wallMaterial = new THREE.MeshPhongMaterial({ color: rgb });
+            const houseObject = new THREE.Mesh(boxGeometry, wallMaterial);
+
+            const geometry = new THREE.CylinderGeometry(0, 1.8, 1.7, 4, 1)
+            const material = new THREE.MeshPhongMaterial( {color: 'rgb(164,74,74)'} );
+            const cone = new THREE.Mesh( geometry, material );
+
+            var window = createWindow(-0.55, 1.35, 1.15)
+            var window2 = createWindow(-1.13, 1.35, 0)
+            var window3 = createWindow(1.13, 1.35, 0)
+            var window4 = createWindow(0, 1.35, -1.15)
+            var fence = createFence(0,0)
+            var door = createDoor(0.5, 1.14, false)
+
+            // Set Shadow Properties
+            cone.castShadow = true;
+            cone.receiveShadow = true;
+            houseObject.castShadow = true;
+            houseObject.receiveShadow = true;
+
+            //Set Positions
+            cone.rotateY(Math.PI / 4)
+            cone.position.set(0, 3.25 ,0)
+
+            houseObject.position.set(0, 1.25, 0)
+
+            window2.rotateY(Math.PI / 2)
+            window3.rotateY(Math.PI / 2)
+
+            //Add Each Element
+            house.add(door)
+            house.add(houseObject)
+            house.add(window)
+            house.add(window2)
+            house.add(window3)
+            house.add(window4)
+            house.add(cone)
+            property.add(house)
+            property.add(fence)
+
+            return property
+            }
+
+            //-----------------------------------------------CREATE DOOR FUNCTION----------------------------------------------------
+
+            function createDoor(x,z,reverse){
+
+            // Create Centerpiece Object
+            var door = new THREE.Object3D();
+            door.position.set(x, 0.75, z);
+
+            // Create Objects
+            const boxGeometry = new THREE.BoxGeometry(0.8,1.5,0.04);
+            const woodMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(164,116,73)' });
+            const doorObject = new THREE.Mesh(boxGeometry, woodMaterial);
+
+            const handleShaftGeometry = new THREE.BoxGeometry(0.03,0.03,0.1);
+            const handleGeometry = new THREE.SphereGeometry( 0.04, 32, 32 );
+            const goldMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(212,175,55)' });
+            const shaftObject = new THREE.Mesh(handleShaftGeometry, goldMaterial);
+            const handleObject = new THREE.Mesh(handleGeometry, goldMaterial)
+
+            // Set Shadows
+            doorObject.castShadow = true;
+            doorObject.receiveShadow = true;
+            shaftObject.castShadow = true;
+            shaftObject.receiveShadow = true;
+            handleObject.castShadow = true;
+            handleObject.receiveShadow = true;
+
+            // Set Positions / Check if the handle should be on the left side
+            if(reverse==true){
+                handleObject.position.set(-0.3, 0, 0.1)
+                shaftObject.position.set(-0.3, 0, 0.02)
+            }else{
+                handleObject.position.set(0.3, 0, 0.1)
+                shaftObject.position.set(0.3, 0, 0.02)
+            }
+
+            // Add Each Element
+            door.add(handleObject)
+            door.add(shaftObject)
+            door.add(doorObject);
+
+            return door
+            }
+
+            //-----------------------------------------------CREATE WINDOW FUNCTION----------------------------------------------------
+
+            function createWindow(x, y, z){
+
+            // Create Centerpiece Object
+            var window = new THREE.Object3D();
+            window.position.set(x, y, z);
+
+            // Create Objects
+            const boxGeometry = new THREE.BoxGeometry(0.08,0.8,0.04);
+            const boxGeometry2 = new THREE.BoxGeometry(0.04,0.8,0.04);
+            const woodMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(164,116,73)' });
+
+            const woodObject1 = new THREE.Mesh(boxGeometry, woodMaterial);
+            const woodObject2 = new THREE.Mesh(boxGeometry, woodMaterial);
+            const woodObject3 = new THREE.Mesh(boxGeometry, woodMaterial);
+            const woodObject4 = new THREE.Mesh(boxGeometry, woodMaterial);
+            const woodObject5 = new THREE.Mesh(boxGeometry2, woodMaterial);
+            const woodObject6 = new THREE.Mesh(boxGeometry2, woodMaterial);
+
+            const boxGeometryGlass= new THREE.BoxGeometry(0.4, 0.4, 0.02);
+            const glassMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(220, 220, 220)' });
+            const glassObject1 = new THREE.Mesh(boxGeometryGlass, glassMaterial);
+            const glassObject2 = new THREE.Mesh(boxGeometryGlass, glassMaterial);
+            const glassObject3 = new THREE.Mesh(boxGeometryGlass, glassMaterial);
+            const glassObject4 = new THREE.Mesh(boxGeometryGlass, glassMaterial);
+
+            // Set Shadows
+            woodObject1.castShadow = true;
+            woodObject1.receiveShadow = true;
+            woodObject2.castShadow = true;
+            woodObject2.receiveShadow = true;
+            woodObject3.castShadow = true;
+            woodObject3.receiveShadow = true;
+            woodObject4.castShadow = true;
+            woodObject4.receiveShadow = true;
+            woodObject5.castShadow = true;
+            woodObject5.receiveShadow = true;
+            woodObject6.castShadow = true;
+            woodObject6.receiveShadow = true;
+            glassObject1.castShadow = true;
+            glassObject1.receiveShadow = true;
+            glassObject2.castShadow = true;
+            glassObject2.receiveShadow = true;
+            glassObject3.castShadow = true;
+            glassObject3.receiveShadow = true;
+            glassObject4.castShadow = true;
+            glassObject4.receiveShadow = true;
+
+            // Set Positions
+            woodObject1.position.set(0.4, 0, 0)
+            woodObject2.position.set(-0.4, 0, 0)
+
+            woodObject3.rotateZ(Math.PI /2)
+            woodObject4.rotateZ(Math.PI /2)
+            woodObject3.position.set(0, 0.4, 0)
+            woodObject4.position.set(0, -0.4, 0)
+
+            woodObject5.rotateZ(Math.PI/2)
+            woodObject5.position.set(0,0,0)
+            woodObject6.position.set(0,0,0)
+
+            glassObject1.position.set(0.20,0.20,0)
+            glassObject2.position.set(0.20,-0.20,0)
+            glassObject3.position.set(-0.20,0.20,0)
+            glassObject4.position.set(-0.20,-0.20, 0)
+
+            // Add Each Element
+            window.add(woodObject1);
+            window.add(woodObject2);
+            window.add(woodObject3);
+            window.add(woodObject4);
+            window.add(woodObject5);
+            window.add(woodObject6);
+            window.add(glassObject1);
+            window.add(glassObject2);
+            window.add(glassObject3);
+            window.add(glassObject4);
+
+            return window
+            }
+
+            //-----------------------------------------------CREATE FENCE STICK FUNCTION----------------------------------------------------
+
+            function createFenceStick(x,z){
+
+            // Create Centerpiece Object
+            var stick = new THREE.Object3D();
+            stick.position.set(x, 0, z);
+
+            // Create Objects
+            const boxGeometry = new THREE.BoxGeometry(0.2,0.7,0.08);
+            const stickMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(256, 256, 256)' });
+            const stickObject = new THREE.Mesh(boxGeometry, stickMaterial);
+
+            // Set Shadow Properties
+            stickObject.castShadow = true;
+            stickObject.receiveShadow = true;
+
+            // Set Position
+            stickObject.position.set(0,0.35,0)
+
+            // Add Each Element
+            stick.add(stickObject);
+
+            return stick;
+            }
+
+            //-----------------------------------------------CREATE FENCE CONNECTOR FUNCTION----------------------------------------------------
+
+            function createFenceConnector(x, z, size){
+
+            // Create Centerpiece Object
+            var connector = new THREE.Object3D();
+            connector.position.set(x, 0.50, z);   
+
+            // Create Objects
+            const boxGeometry = new THREE.BoxGeometry(size,0.2,0.08);
+            const stickMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(256, 256, 256)' });
+            const connectorObject = new THREE.Mesh(boxGeometry, stickMaterial);
+
+            // Set Shadow Properties
+            connectorObject.castShadow = true;
+            connectorObject.receiveShadow = true;
+
+            // Add Each Element
+            connector.add(connectorObject);
+
+            return connector;
+            }
+
+            //-----------------------------------------------CREATE FENCE FUNCTION----------------------------------------------------
+
+            function createFence(x,z){
+
+            // Create Centerpiece Object 
+            var fence = new THREE.Object3D();
+            fence.position.set(x, 0, z);
+
+            // Double cycle to create sticks and connectors all around a 4x4 square centered on (x,0,z)
+            for (var x = -3; x < 4; x++){
+                var k = 1.8;
+                if (x==0){
+                    x++;
+                }
+                if(x>0){
+                    k = -1.8
+                }
+                if(x>-2){
+                    if(!(x%2 == 0)){
+                        var c1 = createFenceConnector(k,0, 3.9)
+                    }else{
+                        var c1 = createFenceConnector(0,k, 3.9)
+                    }
+                }
+                for (var i = -3; i < 4; i++){ 
+                    if(x==-2 && i ==0){
+                        i++
+                    }
+                    if(!(x%2 == 0)){
+                        var s1 = createFenceStick(k, i/1.8)
+                    }else{
+                        var s1 = createFenceStick(i/1.8, k)
+                    }
+                    
+                    if(!(x%2 == 0)){
+                        s1.rotateY(Math.PI / 2)
+                    }
+                    fence.add(s1);
+                }
+                if(x>-2){
+                    if(!(x%2 == 0)){
+                        c1.rotateY(Math.PI / 2)
+                    }
+                    fence.add(c1);
+                }
+            }
+
+            // Add two extra smaller connectors in the front not to obstruct 
+            var c2 = createFenceConnector(-1.15, 1.8, 1.5)
+            var c3 = createFenceConnector(1.15, 1.8, 1.5)
+            fence.add(c2);
+            fence.add(c3);
+
+            return fence;
+            }
+
+            //-----------------------------------------------CREATE ROAD FUNCTION----------------------------------------------------
+
+            function createRoad(x, z, horizontalFlag){
+
+            // Create Centerpiece Object
+            var road = new THREE.Object3D()
+            road.position.set(x, 0, z)
+
+            // Create Objects 
+            const boxGeometry = new THREE.BoxGeometry(2.6,0.05,4);
+            const roadMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(96, 102, 93)' });
+            const roadObject = new THREE.Mesh(boxGeometry, roadMaterial);
+
+            const boxGeometry2 = new THREE.BoxGeometry(0.7,0.2,4);
+            const sidewayMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(160, 163, 158)' });
+            const sidewayObject1 = new THREE.Mesh(boxGeometry2, sidewayMaterial);
+            const sidewayObject2 = new THREE.Mesh(boxGeometry2, sidewayMaterial)
+
+            const boxGeometry3 = new THREE.BoxGeometry(0.2,0.06,1);
+            const stripMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(246, 255, 0)' });
+            const stripObject1 = new THREE.Mesh(boxGeometry3, stripMaterial);
+            const stripObject2 = new THREE.Mesh(boxGeometry3, stripMaterial);
+
+            // Set Shadows 
+            roadObject.castShadow = true;
+            roadObject.receiveShadow = true;
+
+            sidewayObject1.castShadow = true;
+            sidewayObject1.receiveShadow = true;
+            sidewayObject2.castShadow = true;
+            sidewayObject2.receiveShadow = true;
+
+            stripObject1.castShadow = true;
+            stripObject1.receiveShadow = true;
+            stripObject2.castShadow = true;
+            stripObject2.receiveShadow = true;
+
+            // Set Positions / Check if it's an horizontal street
+            roadObject.position.set(0, 0.025, 0);
+
+            sidewayObject1.position.set(-1.65, 0.1, 0);
+            sidewayObject2.position.set(1.65, 0.1, 0);
+
+            stripObject1.position.set(0, 0.03, 1);
+            stripObject2.position.set(0, 0.03, -1);
+
+            if(horizontalFlag==true){
+                road.rotateY(Math.PI /2)
+            }
+
+            // Add Each Element
+            road.add(roadObject);
+            road.add(sidewayObject1);
+            road.add(sidewayObject2);
+            road.add(stripObject1);
+            road.add(stripObject2);
+
+            return road
+        }
+
+        //-----------------------------------------------CREATE CROSS ROAD FUNCTION----------------------------------------------------
+
+        function createCrossRoad(x, z){
+
+        // Create Centerpiece Object
+        var road = new THREE.Object3D()
+        road.position.set(x, 0, z)
+
+        // Create Objects
+        const boxGeometry = new THREE.BoxGeometry(4,0.05,4);
+        const roadMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(96, 102, 93)' });
+        const roadObject = new THREE.Mesh(boxGeometry, roadMaterial);
+
+        const boxGeometry2 = new THREE.BoxGeometry(0.7,0.2,0.7);
+        const sidewayMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(160, 163, 158)' });
+        const sidewayObject1 = new THREE.Mesh(boxGeometry2, sidewayMaterial);
+        const sidewayObject2 = new THREE.Mesh(boxGeometry2, sidewayMaterial)
+        const sidewayObject3 = new THREE.Mesh(boxGeometry2, sidewayMaterial);
+        const sidewayObject4 = new THREE.Mesh(boxGeometry2, sidewayMaterial)
+
+        // Set Shadows
+        roadObject.castShadow = true;
+        roadObject.receiveShadow = true;
+
+        sidewayObject1.castShadow = true;
+        sidewayObject1.receiveShadow = true;
+        sidewayObject2.castShadow = true;
+        sidewayObject2.receiveShadow = true;
+        sidewayObject3.castShadow = true;
+        sidewayObject3.receiveShadow = true;
+        sidewayObject4.castShadow = true;
+        sidewayObject4.receiveShadow = true;
+
+        // Set Positions
+        roadObject.position.set(0, 0.025, 0);
+
+        sidewayObject1.position.set(1.65, 0.1, 1.65);
+        sidewayObject2.position.set(1.65, 0.1, -1.65);
+        sidewayObject3.position.set(-1.65, 0.1, 1.65);
+        sidewayObject4.position.set(-1.65, 0.1, -1.65);
+
+        // Add Each Element
+        road.add(roadObject);
+        road.add(sidewayObject1);
+        road.add(sidewayObject2);
+        road.add(sidewayObject3);
+        road.add(sidewayObject4);
+
+        return road
+        }
+
+        //-----------------------------------------------CREATE CROSS ROAD FUNCTION----------------------------------------------------
+
+        function createTurn(x, z, down, left){
+
+            // Create Centerpiece Object
+            var road = new THREE.Object3D()
+            road.position.set(x, 0, z)
+
+            // Create Objects
+            const boxGeometry = new THREE.BoxGeometry(4,0.05,4);
+            const roadMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(96, 102, 93)' });
+            const roadObject = new THREE.Mesh(boxGeometry, roadMaterial);
+
+            const boxGeometry2 = new THREE.BoxGeometry(0.7,0.2,0.7);
+            const boxGeometry3 = new THREE.BoxGeometry(4,0.2,0.7);
+            const sidewayMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(160, 163, 158)' });
+            const sidewayObject1 = new THREE.Mesh(boxGeometry2, sidewayMaterial);
+            const sidewayObject2 = new THREE.Mesh(boxGeometry3, sidewayMaterial);
+            const sidewayObject3 = new THREE.Mesh(boxGeometry3, sidewayMaterial);
+
+            const boxGeometry4 = new THREE.BoxGeometry(0.2,0.06,1);
+            const stripMaterial = new THREE.MeshPhongMaterial({ color: 'rgb(246, 255, 0)' });
+            const stripObject1 = new THREE.Mesh(boxGeometry4, stripMaterial);
+            const stripObject2 = new THREE.Mesh(boxGeometry4, stripMaterial);
+
+            // Set Shadows
+            roadObject.castShadow = true;
+            roadObject.receiveShadow = true;
+
+            sidewayObject1.castShadow = true;
+            sidewayObject1.receiveShadow = true;
+            sidewayObject2.castShadow = true;
+            sidewayObject2.receiveShadow = true;
+            sidewayObject3.castShadow = true;
+            sidewayObject3.receiveShadow = true;
+
+            // Set Positions
+            roadObject.position.set(0, 0.025, 0);
+
+            sidewayObject3.rotateY(Math.PI/2)
+            stripObject2.rotateY(Math.PI/2)
+
+            if(down==true && left==true){
+                sidewayObject1.position.set(-1.65, 0.1, 1.65);
+                sidewayObject2.position.set(0, 0.1, -1.65);
+                sidewayObject3.position.set(1.65, 0.1, 0);
+                
+                stripObject1.position.set(0,0.03, 1)  
+                stripObject2.position.set(-1,0.03,0)
+            } else if(down==true && left==false){
+                sidewayObject1.position.set(1.65, 0.1, 1.65);
+                sidewayObject2.position.set(0, 0.1, -1.65);
+                sidewayObject3.position.set(-1.65, 0.1, 0);
+                
+                stripObject1.position.set(0,0.03, 1)  
+                stripObject2.position.set(1,0.03,0)
+            } else if(down==false && left==true){
+                sidewayObject1.position.set(-1.65, 0.1, -1.65);
+                sidewayObject2.position.set(0, 0.1, 1.65);
+                sidewayObject3.position.set(1.65, 0.1, 0);
+                
+                stripObject1.position.set(0,0.03, -1)  
+                stripObject2.position.set(-1,0.03,0)
+            }else{
+                sidewayObject1.position.set(1.65, 0.1, -1.65);
+                sidewayObject2.position.set(0, 0.1, 1.65);
+                sidewayObject3.position.set(-1.65, 0.1, 0);
+                
+                stripObject1.position.set(0,0.03, -1)  
+                stripObject2.position.set(1,0.03,0)
+                
+            }
+
+            // Add Each Element
+            road.add(roadObject);
+            road.add(sidewayObject1);
+            road.add(sidewayObject2);
+            road.add(sidewayObject3);
+            road.add(stripObject1);
+            road.add(stripObject2);
+
+            return road
+            }
+
+        // ANIMATING
+        // Displacement value
+
+        function computeFrame(time) {
+
+            // Rendering
+            helper.render(sceneElements);
+
+            // NEW --- Update control of the camera
+            sceneElements.control.update();
+
+            // Call for the next frame
+            requestAnimationFrame(computeFrame);
+        }
+
+        // STARTING
+
+        init();
+
+    </script>
+    
+</head>
+
+<body>
+    <style>
+        /* Split the screen in half */
+        .splitRight {
+        height: 100%;
+        width: 80%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        right: 0;
+        }
+
+        .splitLeft {
+        height: 100%;
+        width: 20%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        left: 0;
+        }
+
+        .strip1 {
+        height: 100%;
+        width: 20%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        left: 0;
+        }
+        .strip2 {
+        height: 100%;
+        width: 20%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        left: 20%;
+        }
+        .strip3 {
+        height: 100%;
+        width: 20%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        left: 20%;
+        }
+        .strip4 {
+        height: 100%;
+        width: 20%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        left: 20%;
+        }
+        .strip5 {
+        height: 100%;
+        width: 20%;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        overflow-x: hidden;
+        left: 20%;
+        }
+
+        .centered {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        }
+        .centeredSelectors {
+        position: absolute;
+        top: 90%;
+        left: 30%;
+        transform: translate(-30%, -90%);
+        text-align: center;
+        }
+        .centeredLegend {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -20%);
+        text-align: center;
+        }
+    </style>
+    <div class="splitRight">
+        <div class="centered">
+            <div id="Tag3DScene"></div>
+        </div>
+    </div>
+    <!--<div id="Tag3DScene" height=100px; width=80%;> </div>-->
+    <div class="splitLeft">
+        <div class="centeredLegend">
+            <p>0 - Nothing</p>
+            <p>1 - House</p>
+            <p>2 - Building</p>
+            <p>3 - Park</p>
+            <p>4 - Vertical Road</p>
+            <p>5 - Horizontal Road</p>
+            <p>6 - Croos Road</p>
+            <p>7 - Righ Up Turn</p>
+            <p>8 - Left Up Turn</p>
+            <p>9 - Right Down Turn</p>
+            <p>10 - Left Down Turn</p>
+
+        </div>
+        <div class="centeredSelectors">
+            <div id="Menu" >
+                <select name="selectPos1" id="pos1">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option>
+                </select>
+                <select name="selectPos2" id="pos2">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos3" id="pos3">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos4" id="pos4" position="absolute" >
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos5" id="pos5" position="absolute">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos6" id="pos6">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos7" id="pos7">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos8" id="pos8">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos9" id="pos9">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos10" id="pos10">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos11" id="pos11">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos12" id="pos12">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos13" id="pos13">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos14" id="pos14">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos15" id="pos15">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos16" id="pos16">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos17" id="pos17">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos18" id="pos18">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos19" id="pos19">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos20" id="pos20">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos21" id="pos21">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos22" id="pos22" position="">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos23" id="pos23">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos24" id="pos24">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+                <select name="selectPos25" id="pos25">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option> 
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option> 
+                    <option value="10">10</option> 
+                </select>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
